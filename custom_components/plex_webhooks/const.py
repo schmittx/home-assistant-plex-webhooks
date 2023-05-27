@@ -1,4 +1,6 @@
 """Constants used by the Plex Webhooks integration."""
 DOMAIN = "plex_webhooks"
 
-PLEX_EVENT = "plex_event"
+EVENT_RECEIVED = f"{DOMAIN}_received"
+
+THUMBNAIL_DIRECTORY = f"/config/www/{DOMAIN}"

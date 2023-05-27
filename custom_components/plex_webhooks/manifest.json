@@ -2,7 +2,7 @@
     "domain": "plex_webhooks",
     "name": "Plex Webhooks",
     "documentation": "https://github.com/schmittx/plex_webhooks/",
-    "requirements": [],
+    "requirements": ["aiofiles==23.1.0"],
     "dependencies": ["webhook"],
     "codeowners": ["@schmittx"],
     "config_flow": true,

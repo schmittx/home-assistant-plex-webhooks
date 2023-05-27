@@ -1,8 +1,10 @@
 """Support for Plex webhooks."""
 from __future__ import annotations
 
-from aiohttp.web import Request
+import aiofiles
+import aiohttp
 import logging
+import os
 
 from homeassistant.components import webhook
 from homeassistant.config_entries import ConfigEntry
@@ -11,7 +13,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers import config_entry_flow
 from homeassistant.helpers.typing import ConfigType
 
-from .const import DOMAIN, PLEX_EVENT
+from .const import DOMAIN, EVENT_RECEIVED, THUMBNAIL_DIRECTORY
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -26,6 +28,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     webhook.async_register(
         hass, DOMAIN, "Plex", entry.data[CONF_WEBHOOK_ID], handle_webhook,
     )
+    if not os.path.isdir(THUMBNAIL_DIRECTORY):
+        os.mkdir(THUMBNAIL_DIRECTORY)
     return True
 
 
@@ -38,27 +42,33 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 async_remove_entry = config_entry_flow.webhook_async_remove_entry
 
 
-async def handle_webhook(hass: HomeAssistant, webhook_id: str, request: Request) -> None:
+async def handle_webhook(
+    hass: HomeAssistant,
+    webhook_id: str,
+    request: aiohttp.web.Request,
+) -> None:
     """Handle incoming webhook with Plex inbound messages."""
-    _LOGGER.debug(
-        "Plex webook received message - webhook_id: %s",
-        webhook_id,
-    )
+    _LOGGER.debug(f"Received message - webhook_id: {webhook_id}")
 
     data = {}
     try:
         reader = await request.multipart()
-        # https://docs.aiohttp.org/en/stable/multipart.html#aiohttp-multipart
         while True:
             part = await reader.next()
             if part is None:
                 break
-            if part.name == "payload":
+            if part.headers[aiohttp.hdrs.CONTENT_TYPE] == "application/json":
                 data = await part.json()
+                continue
+            async with aiofiles.open(
+                file=f"{THUMBNAIL_DIRECTORY}/{webhook_id}.png",
+                mode="wb",
+            ) as file:
+                await file.write(await part.read(decode=False))
     except ValueError:
-        _LOGGER.warn("Issue decoding webhook: " + part.text())
-        return None
+        _LOGGER.warn(f"Issue decoding webhook: {part.text()}")
+        return
 
     data["webhook_id"] = webhook_id
-    hass.bus.async_fire(PLEX_EVENT, data)
+    hass.bus.async_fire(EVENT_RECEIVED, data)
     return
