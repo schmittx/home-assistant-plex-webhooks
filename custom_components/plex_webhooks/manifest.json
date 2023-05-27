@@ -8,5 +8,5 @@
     "config_flow": true,
     "iot_class": "cloud_push",
     "loggers": ["plex_webhooks"],
-    "version": "0.1.0"
+    "version": "0.1.1"
 }
