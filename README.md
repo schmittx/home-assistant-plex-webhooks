@@ -1,7 +1,3 @@
-# home-assistant-plex-webhooks
-Plex Webhooks integration for Home Assistant
-
-
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg?style=for-the-badge)](https://github.com/hacs/integration)
 # Plex Webhooks Home Assistant Integration
 Custom component to handle [Plex webhooks](https://support.plex.tv/articles/115002267687-webhooks/) in [Home Assistant](https://home-assistant.io).
