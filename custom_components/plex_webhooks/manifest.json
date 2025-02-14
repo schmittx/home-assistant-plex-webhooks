@@ -1,12 +1,14 @@
 {
     "domain": "plex_webhooks",
     "name": "Plex Webhooks",
-    "documentation": "https://github.com/schmittx/plex_webhooks/",
-    "requirements": ["aiofiles>=23.1.0"],
-    "dependencies": ["webhook"],
+    "after_dependencies": [],
     "codeowners": ["@schmittx"],
     "config_flow": true,
+    "dependencies": ["webhook"],
+    "documentation": "https://github.com/schmittx/home-assistant-plex-webhooks",
     "iot_class": "cloud_push",
+    "issue_tracker": "https://github.com/schmittx/home-assistant-plex-webhooks/issues",
     "loggers": ["plex_webhooks"],
-    "version": "1.1.2"
+    "requirements": [],
+    "version": "1.1.3"
 }

@@ -9,7 +9,7 @@ Custom component to handle [Plex webhooks](https://support.plex.tv/articles/1150
 - Some webhooks includes a thumbnail image. When present, this is parsed and saved to `/www/plex_webhooks` folder for use.
 
 ## Install
-1. Ensure Home Assistant is updated to version 2021.4.0 or newer.
+1. Ensure Home Assistant is updated to version 2025.2.0 or newer.
 2. Use HACS and add as a [custom repo](https://hacs.xyz/docs/faq/custom_repositories); or download and manually move to the `custom_components` folder.
 3. Once the integration is installed follow the standard process to setup via UI and search for `Plex Webhooks`.
 4. Follow the prompts.

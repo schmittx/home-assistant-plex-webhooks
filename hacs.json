@@ -1,5 +1,7 @@
 {
 	"name": "Plex Webhooks",
 	"content_in_root": false,
+	"homeassistant": "2025.2.0",
+	"iot_class": "Cloud Push",
 	"render_readme": true
 }

@@ -66,7 +66,7 @@ async def handle_webhook(
             ) as file:
                 await file.write(await part.read(decode=False))
     except ValueError:
-        _LOGGER.warn(f"Issue decoding webhook: {part.text()}")
+        _LOGGER.warning(f"Issue decoding webhook: {part.text()}")
         return
 
     data["webhook_id"] = webhook_id
