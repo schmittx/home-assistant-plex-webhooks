@@ -1,10 +1,12 @@
 """Support for Plex webhooks."""
+
 from __future__ import annotations
+
+import logging
+from pathlib import Path
 
 import aiofiles
 import aiohttp
-import logging
-import os
 
 from homeassistant.components import webhook
 from homeassistant.config_entries import ConfigEntry
@@ -26,10 +28,15 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Configure based on config entry."""
     webhook.async_register(
-        hass, DOMAIN, "Plex", entry.data[CONF_WEBHOOK_ID], handle_webhook,
+        hass,
+        DOMAIN,
+        "Plex",
+        entry.data[CONF_WEBHOOK_ID],
+        handle_webhook,
     )
-    if not os.path.isdir(THUMBNAIL_DIRECTORY):
-        os.mkdir(THUMBNAIL_DIRECTORY)
+    if not Path(THUMBNAIL_DIRECTORY).is_dir():
+        _LOGGER.debug("Creating directory: %s", THUMBNAIL_DIRECTORY)
+        Path(THUMBNAIL_DIRECTORY).mkdir()
     return True
 
 
@@ -48,7 +55,7 @@ async def handle_webhook(
     request: aiohttp.web.Request,
 ) -> None:
     """Handle incoming webhook with Plex inbound messages."""
-    _LOGGER.debug(f"Received message - webhook_id: {webhook_id}")
+    _LOGGER.debug("Received message - webhook_id: %s", webhook_id)
 
     data = {}
     try:
@@ -66,7 +73,7 @@ async def handle_webhook(
             ) as file:
                 await file.write(await part.read(decode=False))
     except ValueError:
-        _LOGGER.warning(f"Issue decoding webhook: {part.text()}")
+        _LOGGER.warning("Issue decoding webhook: %s", part.text())
         return
 
     data["webhook_id"] = webhook_id
