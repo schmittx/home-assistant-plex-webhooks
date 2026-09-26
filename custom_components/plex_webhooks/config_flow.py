@@ -1,7 +1,5 @@
 """Adds config flow for Plex Webhooks integration."""
 
-from __future__ import annotations
-
 from homeassistant.helpers import config_entry_flow
 
 from .const import DOMAIN

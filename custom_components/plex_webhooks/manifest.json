@@ -10,5 +10,5 @@
     "issue_tracker": "https://github.com/schmittx/home-assistant-plex-webhooks/issues",
     "loggers": ["plex_webhooks"],
     "requirements": [],
-    "version": "1.2.0"
+    "version": "1.2.1"
 }
